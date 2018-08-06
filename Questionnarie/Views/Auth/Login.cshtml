@@ -1,0 +1,29 @@
+﻿@model Tasks.Models.LoginViewModel
+
+<!--Questionnarie.Models.LoginViewModel-->
+
+@{
+    ViewBag.Title = "Login";
+    Layout = "~/Views/Shared/_LogInOutLayout.cshtml";
+}
+    <h2>Login</h2>
+    @using (Html.BeginForm("Login", "Auth", new {ReturnUrl = Model.ReturnUrl}, FormMethod.Post))
+    {
+        <div class="form-group">
+            @Html.ValidationSummary()
+            <table>
+                <tr>
+                    <td>@Html.LabelFor(x => x.UserName)</td>
+                    <td>@Html.TextBoxFor(x => x.UserName, new { @class = "form-control" })</td>
+                </tr>
+                <tr>
+                    <td>@Html.LabelFor(x => x.Password)</td>
+                    <td>@Html.PasswordFor(x => x.Password, new { @class = "form-control" })</td>
+                </tr>
+                <tr>
+                    <td><input type="submit" value="Login" class="btn btn-primary" /></td>
+                </tr>
+
+            </table>
+        </div>
+    }

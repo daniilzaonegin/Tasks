@@ -1,0 +1,53 @@
+﻿@model Tasks.Models.CompleteDialogViewModel
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>CompleteTask</title>
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <link href="~/Content/ErrorStyles.css" rel="stylesheet" type="text/css" />
+    <script src="~/Scripts/jquery-1.12.4.min.js"></script>
+    <script src="~/Scripts/jquery-ui-1.12.1.js"></script>
+    <script src="~/Scripts/jquery.validate.js"></script>
+</head>
+
+<body>
+    @if (!Model.Completed)
+    {
+        using (Html.BeginForm("CompleteTask", "Task", null, FormMethod.Post, htmlAttributes: new { id = "dialogForm" }))
+        {
+            @Html.ValidationSummary()
+            @Html.HiddenFor(x => x.TaskId)
+
+                        <div class="form-group">
+                @Html.LabelFor(x => x.CompleteMsg)
+                @Html.TextAreaFor(x => x.CompleteMsg, new { @class = "form-control", required = "" })
+            </div>
+            <input class="btn btn-primary" type="submit" value="Save" />
+
+            @Html.ActionLink("Return to task list", actionName: "TaskList", controllerName: "Home", routeValues: null, htmlAttributes: new { @class = "btn btn-default" })
+        }
+        <script>
+            $("#dialogForm").validate({
+        errorClass: "input-validation-error",
+                highlight: function (element, errorClass) {
+                    $(element).addClass(errorClass);
+                }
+            });
+        </script>
+    }
+    else
+    {
+        <div class="form-group">
+            @Html.LabelFor(x => x.CompleteMsg)
+            @Html.TextAreaFor(x => x.CompleteMsg, new { @class = "form-control"})
+        </div>
+    }
+</body>
+</html>

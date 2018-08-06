@@ -1,0 +1,38 @@
+﻿@using Tasks.Constants
+@model IEnumerable<MenuEnum>
+
+@*@Html.ActionLink("Discard Selection", "TaskList", "Home", null, new { @class = "btn btn-block btn-default btn-lg", @style = "margin:10px;" })*@
+
+@foreach(MenuEnum link in Model)
+{
+    string text = "";
+
+    switch (link)
+    {
+        case MenuEnum.MyActiveTasks:
+            text = "My Active Tasks";
+            break;
+        case MenuEnum.MyArchiveTasks:
+            text = "My Archive Tasks";
+            break;
+        case MenuEnum.MyCompletedTasks:
+            text = "My Completed Tasks";
+            break;
+        case MenuEnum.TasksAssignedToMe:
+            text = "Tasks Assigned To Me";
+            break;
+        default:
+            text = link.ToString();
+            break;
+    }
+
+    @Html.RouteLink(text, new {
+        controller = "Home",
+        action = "TaskList",
+        selection=link,
+        page=1
+    }, new {
+        @class="btn btn-block btn-default btn-lg" + (link==ViewBag.Selection ? " btn-primary":""),
+        @style="margin:10px;"
+    })
+}

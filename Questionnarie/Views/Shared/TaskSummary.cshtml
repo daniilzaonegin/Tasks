@@ -1,0 +1,77 @@
+﻿@model Tasks.Models.TaskSummaryViewModel
+
+@*<div class="well" style="overflow:auto;">
+    <span class="pull-left label label-default">Task from: @Model.Task.FromUserId</span>
+    @if (Model.Task.Completed)
+    {
+        <span class="pull-right label label-success">Task completed</span>
+    }
+    
+    <h4 class="visible-xs">
+        <strong>@Model.Task.Summary</strong>
+        <span class="pull-right label label-primary">@Model.Task.When.ToString("dd/MM/yyyy")</span>
+    </h4>
+
+    <h3 class="hidden-xs">
+        <strong>@Model.Task.Summary</strong>
+        <span class="pull-right label label-primary">Due to @Model.Task.When.ToString("dd/MM/yyyy")</span>
+    </h3>
+
+    <span class="lead">@Model.Task.Subject</span>
+    <span class="pull-right">
+        @if (!Model.Task.Completed)
+        {
+            <button class="btn btn-success" onclick="DisplayUpdateCustomerDialog(@Model.Task.TaskId)">Complete Task</button>
+        }
+        else
+        {
+            <button class="btn btn-warning" onclick="DisplayUpdateCustomerDialog(@Model.Task.TaskId)">Show Messages</button>
+        }
+    </span>
+</div>*@
+
+<div class="well" style="overflow:auto;">
+    @if (Model.Task.Completed)
+    {
+        <h3 class="text-center">
+            <span class="label label-success">Task completed</span>
+        </h3>
+    }
+    <div class="col-xs-8">
+        <span class="label label-default">Task from: @Model.Task.FromUserId</span>
+        <h4 class="visible-xs">
+            <strong>@Model.Task.Subject</strong>
+        </h4>
+
+        <h3 class="hidden-xs">
+            <strong>@Model.Task.Subject</strong>
+        </h3>
+
+        <span class="lead">@Model.Task.Summary</span>
+
+    </div>
+    <div class="pull-right col-xs-4">
+
+
+        <h3 class="hidden-xs">
+            <span class="label label-primary">Due to @Model.Task.When.ToString("dd/MM/yyyy")</span>
+        </h3>
+        <h4 class="visible-xs">
+            <span class="label label-primary">@Model.Task.When.ToString("dd/MM/yyyy")</span>
+        </h4>
+
+
+        @*@Html.ActionLink("Complete Task", actionName: "CompleteTask", controllerName: "Task", routeValues: new { taskid = Model.Task.TaskId },
+            htmlAttributes: new { @class = "btn btn-success" })*@
+        @if (!Model.Task.Completed)
+        {
+            <button class="btn btn-success" onclick="DisplayUpdateCustomerDialog(@Model.Task.TaskId)">Complete Task</button>
+        }
+        else
+        {
+            <button class="btn btn-warning" onclick="DisplayUpdateCustomerDialog(@Model.Task.TaskId)">Show Messages</button>
+        }
+    </div>
+
+
+</div>

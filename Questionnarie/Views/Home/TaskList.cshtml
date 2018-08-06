@@ -1,0 +1,68 @@
+﻿@using Tasks.Model.Entities
+@using Tasks.HtmlHelpers
+@using Tasks.Models
+@model Tasks.Models.TaskListViewModel
+
+@{
+    ViewBag.Title = "Home";
+}
+
+
+<script>
+    function DisplayUpdateCustomerDialog(t) {
+        var applyButton = {
+            text: "Save message",
+            click: SaveButton
+        };
+        var cancelButton = {
+            text: "Cancel",
+            click: CloseDialog
+        };
+
+        $.get("/Task/CompleteTask",
+            { taskId: t },
+            function (dialogHTML) {
+                $("#divDialog").html(dialogHTML);
+                $("#divDialog").dialog({
+                    buttons: [],
+                    height: 400,
+                    width: 400,
+                    modal: true,
+                    title: "Enter a completion message"
+                });
+            });
+
+    }
+
+    function SaveButton() {
+        //...Do something to update the page from the dialog...
+        CloseDialog();
+    }
+    function CloseDialog() {
+        $("#divDialog").dialog("close");
+    }
+</script>
+
+<div style="display:none;" id="divDialog"></div>
+
+<h2>Home</h2>
+@if (@TempData["message"] != null)
+{
+    <div class="alert alert-success">@TempData["message"]</div>
+}
+@if (@TempData["error"] != null)
+{
+    <div class="alert alert-danger">@TempData["error"]</div>
+}
+
+
+@foreach (WorkTask t in Model.TaskList)
+{
+    @Html.Partial("TaskSummary", new TaskSummaryViewModel() { Role = Model.UserRole, Task = t })
+}
+
+<div class="panel-footer">
+    <div class="pager">
+        @Html.PageLinks(Model.PagingInfo, x => Url.Action(actionName:"TaskList", routeValues:new { page = x, Selection = Model.Selection }))
+    </div>
+</div>

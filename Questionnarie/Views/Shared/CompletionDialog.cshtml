@@ -1,0 +1,17 @@
+﻿@model Tasks.Models.CompleteDialogViewModel
+
+@{ 
+    Layout = null;
+}
+
+@using (Html.BeginForm())
+{
+    @Html.HiddenFor(x=>x.TaskId)
+
+    <div class="form-group">
+        @Html.LabelFor(x => x.CompleteMsg)
+        @Html.TextAreaFor(x => x.CompleteMsg, new { @class = "form-control" })
+    </div>
+    <input class="btn btn-primary" type="submit" value="Save" />
+    @Html.ActionLink("Return to task list", "TaskList", "Home", new { @class = "btn btn-default" })
+}
