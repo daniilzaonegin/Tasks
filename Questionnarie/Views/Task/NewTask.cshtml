@@ -1,10 +1,34 @@
 ﻿@model Tasks.Models.NewTaskViewModel
+@using System.ComponentModel.DataAnnotations
 
 @{
     ViewBag.Title = "NewTask";
 }
 
 <h2>NewTask</h2>
+
+<script>
+    $(document).ready(function setUpUIElements() {
+        $("#saveTaskForm").validate({
+            errorClass: "input-validation-error",
+            highlight: function (element, errorClass) {
+                $(element).addClass(errorClass);
+            }
+        });
+        $("#datepicker").datepicker();
+        $("#datepicker").datepicker("option", "dateFormat", "dd/mm/yy");
+        $("#datepicker").datepicker("setDate", new Date());
+        //update symbols count in subject and summary footers
+        updateFooter($("#summary").find("TextArea")[0], "summary");
+        updateFooter($("#subject").find("TextArea")[0], "subject");
+    });
+
+    function updateFooter(val, id) {
+        var length = val.value.length;
+
+        $($("#" + id)).find("#footer").text(length);
+    }
+</script>
 
 @using (Html.BeginForm("NewTask", "Task", null, FormMethod.Post, htmlAttributes: new { id = "saveTaskForm" }))
 {
@@ -20,26 +44,17 @@
         @Html.LabelFor(x => x.NewTask.When)
         @Html.TextBoxFor(x => x.NewTask.When, new { @class = "form-control", required = "", id = "datepicker" })
     </div>
-    <div class="form-group">
+    <div class="form-group" id="subject">
         @Html.LabelFor(x => x.NewTask.Subject)
-        @Html.TextAreaFor(x => x.NewTask.Subject, new { @class = "form-control" })
+        @Html.TextAreaFor(x => x.NewTask.Subject, new { @class = "form-control", maxlength = "100", @onkeyup = "updateFooter(this, 'subject');" })
+        <div class="text-left text-info"><small>count:</small><small id="footer"></small><small>/100</small></div>
     </div>
-    <div class="form-group">
+    <div class="form-group" id="summary">
         @Html.LabelFor(x => x.NewTask.Summary)
-        @Html.TextAreaFor(x => x.NewTask.Summary, new { @class = "form-control", required = "" })
+        @Html.TextAreaFor(x => x.NewTask.Summary, new { @class = "form-control", required = "", maxlength="250", @onkeyup = "updateFooter(this, 'summary');" })
+        <div class="text-left text-info"><small>count:</small><small id="footer"></small><small>/250</small></div>
     </div>
     <input class="btn btn-primary" type="submit" value="Save" />
 
     @Html.ActionLink("Return to task list", actionName: "TaskList", controllerName: "Home", routeValues: null, htmlAttributes: new { @class = "btn btn-default" })
 }
-<script>
-    $("#saveTaskForm").validate({
-        errorClass: "input-validation-error",
-        highlight: function (element, errorClass) {
-            $(element).addClass(errorClass);
-        }
-    });
-    $("#datepicker").datepicker();
-    $("#datepicker").datepicker("option", "dateFormat", "dd/mm/yy");
-    $("#datepicker").datepicker("setDate", new Date());
-</script>
