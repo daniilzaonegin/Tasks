@@ -21,12 +21,12 @@
         @Html.TextBoxFor(x => x.NewTask.When, new { @class = "form-control", required = "", id = "datepicker" })
     </div>
     <div class="form-group">
-        @Html.LabelFor(x => x.NewTask.Summary)
-        @Html.TextAreaFor(x => x.NewTask.Summary, new { @class = "form-control", required = "" })
+        @Html.LabelFor(x => x.NewTask.Subject)
+        @Html.TextAreaFor(x => x.NewTask.Subject, new { @class = "form-control" })
     </div>
     <div class="form-group">
-        @Html.LabelFor(x => x.NewTask.Subject)
-        @Html.TextAreaFor(x => x.NewTask.Subject, new { @class = "form-control"})
+        @Html.LabelFor(x => x.NewTask.Summary)
+        @Html.TextAreaFor(x => x.NewTask.Summary, new { @class = "form-control", required = "" })
     </div>
     <input class="btn btn-primary" type="submit" value="Save" />
 
