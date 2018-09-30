@@ -24,7 +24,7 @@ namespace Tasks.Models
                         null,DataProtectionScope.LocalMachine);
                     return ToSecureString(System.Text.Encoding.Unicode.GetString(decryptedData));
                 }
-                catch (CryptographicException e)
+                catch (CryptographicException)
                 {
                     return null;
                 }

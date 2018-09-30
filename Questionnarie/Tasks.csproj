@@ -218,6 +218,7 @@
     <Compile Include="Models\AppSettings.cs" />
     <Compile Include="Models\AppUserState.cs" />
     <Compile Include="Models\CompleteDialogViewModel.cs" />
+    <Compile Include="Models\ForgotPasswordViewModel.cs" />
     <Compile Include="Models\NewTaskViewModel.cs" />
     <Compile Include="Models\PagingInfo.cs" />
     <Compile Include="Models\LoginViewModel.cs" />
@@ -246,6 +247,8 @@
     <Content Include="Views\Nav\MenuHorizontal.cshtml" />
     <Content Include="Views\Admin\EncryptPasswords.cshtml" />
     <Content Include="Views\Admin\Success.cshtml" />
+    <Content Include="Views\Auth\ForgotPassword.cshtml" />
+    <Content Include="Views\Auth\ResetEmailIsSent.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

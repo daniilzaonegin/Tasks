@@ -8,6 +8,9 @@ using System.Collections.Generic;
 using System.Security.Claims;
 using System.Web;
 using System.Web.Mvc;
+using System.Linq;
+using System.Security.Cryptography;
+using Tasks.Helpers;
 
 namespace Tasks.Controllers
 {
@@ -15,10 +18,12 @@ namespace Tasks.Controllers
     public class AuthController : Controller
     {
         private IUserTasksRepository _userRepository;
+        private IEmailSender _mailSender;
 
-        public AuthController(IUserTasksRepository userRepository)
+        public AuthController(IUserTasksRepository userRepository, IEmailSender mailSender)
         {
             _userRepository = userRepository;
+            _mailSender = mailSender;
         }
 
         // GET: Auth
@@ -61,6 +66,57 @@ namespace Tasks.Controllers
         public ViewResult Logout() {
             IdentitySignOut();
             return View();
+        }
+
+        public ViewResult ForgotPassword()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public ViewResult ForgotPassword(ForgotPasswordViewModel model)
+        {
+            if(!ModelState.IsValid)
+            {
+                return View();
+            }
+            //e-mail точно не пустой
+            IEnumerable<User> emailUsers = _userRepository.GetUserByEmail(model.Email);
+
+            if (emailUsers.Count() > 1)
+            {
+                TempData["Error"]="More than one user exists with this email!";
+                return View();
+            }
+
+            //найден один пользователь с таким e-mail
+            // сохраняем его
+            User user = emailUsers.First();
+
+            string tokenStr = GenerateRandomToken();
+            //сохраняем токен в базе
+            user.PasswordResetToken = tokenStr;
+            _userRepository.Save();
+            // и в ссылке пользователю
+            string callbackUrl = $"{Request.Url.Scheme}://{Request.Url.Authority}{Url.Content(Url.Action("ChangePassword", new { token = tokenStr, userId = user.UserName }))}";
+            string mailBody = String.Format("Please reset your password by clicking <a href='" + callbackUrl + "'>here</a>");
+            _mailSender.SendEmail(user.Email, "Task4u: Reset Password", mailBody);
+
+            return View("ResetEmailIsSent");
+        }
+        private string GenerateRandomToken()
+        {
+            String result;
+            using (RandomNumberGenerator rng = RandomNumberGenerator.Create())
+            {
+
+                Byte[] bytes = new Byte[10];
+                rng.GetBytes(bytes);
+
+                result = Convert.ToBase64String(bytes);
+            }
+
+            return result;
         }
         private void IdentitySignin (AppUserState appUserState, bool isPesistent =false)
         {

@@ -53,6 +53,9 @@ namespace Tasks.Model
         [Column("Email")] 
         public string Email { get; set; }
 
+        [MaxLength(16)]
+        [Column("PasswordResetToken")]
+        public string PasswordResetToken { get; set; }
 
         [ForeignKey("ToUserId")]
         public ICollection<WorkTask> ToTasks { get; set; }

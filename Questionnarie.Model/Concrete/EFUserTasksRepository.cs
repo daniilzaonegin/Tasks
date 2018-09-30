@@ -22,7 +22,10 @@ namespace Tasks.Model.Concrete
         {
             return context.Users.Where(u => u.UserName == user && u.Password == pwd).FirstOrDefault();
         }
-
+        public IEnumerable<User> GetUserByEmail(string email)
+        {
+            return context.Users.Where(u => u.Email == email);
+        }
         public string GetUserEmail(string UserName)
         {
             return context.Users.Where(u => u.UserName == UserName).FirstOrDefault()?.Email;

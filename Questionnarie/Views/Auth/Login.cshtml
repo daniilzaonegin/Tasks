@@ -21,6 +21,10 @@
                     <td>@Html.PasswordFor(x => x.Password, new { @class = "form-control" })</td>
                 </tr>
                 <tr>
+                    <td></td>
+                    <td>@Html.ActionLink("Forgot password?", "ForgotPassword")</td>
+                </tr>
+                <tr>
                     <td><input type="submit" value="Login" class="btn btn-primary" /></td>
                 </tr>
 
