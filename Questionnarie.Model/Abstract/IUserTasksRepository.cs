@@ -6,6 +6,7 @@ namespace Tasks.Model.Abstract
     public interface IUserTasksRepository
     {
         User GetUser(string user, string pwd);
+        User GetUserByToken(string user, string token);
         IEnumerable<User> GetUserByEmail(string email);
         string GetUserEmail(string UserName);
         IEnumerable<WorkTask> Tasks { get; }

@@ -13,6 +13,6 @@ namespace Tasks.Abstract
         SecureString EmailPwd { get; }
         string SmtpServer { get; }
         int SmtpPort { get; }
-
+        int ResetPasswordTokenExpireTime { get; }
     }
 }

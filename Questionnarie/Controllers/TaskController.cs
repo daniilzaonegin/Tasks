@@ -57,7 +57,7 @@ namespace Tasks.Controllers
                         taskToChange.ToUserId,
                         taskToChange.CompleteMsg,
                         taskToChange.When,
-                        $"{Request.Url.Scheme}://{Request.Url.Authority}{Url.Content("~")}"));
+                        $"<a href='{Request.Url.Scheme}://{Request.Url.Authority}{Url.Content("~")}'>here</a>"));
                     TempData["message"] = $"{TempData["message"]}<br/> Mail to the task creator was sent successfully!";
                 }
                 catch (SmtpException e)
@@ -104,11 +104,11 @@ namespace Tasks.Controllers
                 try
                 {
                     emailSender.SendEmail(email, "You have a new task:"+t.NewTask.Summary, 
-                        String.Format("Task Subject: {0}\r\nTask Creator: {1}\r\nTask Due Time: {2}\r\n\r\nCheckout here:{3}",
+                        String.Format("Task Subject: {0}\r\nTask Creator: {1}\r\nTask Due Time: {2}\r\n\r\nCheck up:{3}",
                         t.NewTask.Subject,
                         t.NewTask.FromUserId,
                         t.NewTask.When.ToString(),
-                        $"{Request.Url.Scheme}://{Request.Url.Authority}{Url.Content("~")}"));
+                        $"<a href='{Request.Url.Scheme}://{Request.Url.Authority}{Url.Content("~")}'>here</a>"));
                     TempData["message"] = $"{TempData["message"]}<br/> Mail to the task resolver was sent successfully!";
                 }
                 catch (SmtpException e)

@@ -11,6 +11,7 @@ using System.Web.Mvc;
 using System.Linq;
 using System.Security.Cryptography;
 using Tasks.Helpers;
+using Tasks.Abstract;
 
 namespace Tasks.Controllers
 {
@@ -19,11 +20,13 @@ namespace Tasks.Controllers
     {
         private IUserTasksRepository _userRepository;
         private IEmailSender _mailSender;
+        private IAppSettings _appSettings;
 
-        public AuthController(IUserTasksRepository userRepository, IEmailSender mailSender)
+        public AuthController(IUserTasksRepository userRepository, IEmailSender mailSender, IAppSettings appSettings)
         {
             _userRepository = userRepository;
             _mailSender = mailSender;
+            _appSettings = appSettings;
         }
 
         // GET: Auth
@@ -96,6 +99,8 @@ namespace Tasks.Controllers
             string tokenStr = GenerateRandomToken();
             //сохраняем токен в базе
             user.PasswordResetToken = tokenStr;
+            user.PasswordResetTokenDate = DateTime.Now;
+
             _userRepository.Save();
             // и в ссылке пользователю
             string callbackUrl = $"{Request.Url.Scheme}://{Request.Url.Authority}{Url.Content(Url.Action("ChangePassword", new { token = tokenStr, userId = user.UserName }))}";
@@ -103,6 +108,39 @@ namespace Tasks.Controllers
             _mailSender.SendEmail(user.Email, "Task4u: Reset Password", mailBody);
 
             return View("ResetEmailIsSent");
+        }
+
+        public ActionResult ChangePassword(string token, string userid)
+        {
+            User user = _userRepository.GetUserByToken(userid, token);
+            if (user==null || 
+                DateTime.Now.Subtract(user.PasswordResetTokenDate.Value).TotalSeconds > 
+                    _appSettings.ResetPasswordTokenExpireTime)
+            {
+                return HttpNotFound();
+            }
+            ChangePasswordViewModel vm = new ChangePasswordViewModel() { Token = token, UserId = userid };
+
+            return View(vm);
+        }
+
+        [HttpPost]
+        public ActionResult ChangePassword(string token, string userid, string newPwd)
+        {
+            User user = _userRepository.GetUserByToken(userid, token);
+            if (user == null ||
+                DateTime.Now.Subtract(user.PasswordResetTokenDate.Value).TotalSeconds >
+                    _appSettings.ResetPasswordTokenExpireTime)
+            {
+                return HttpNotFound();
+            }
+
+            user.Password = newPwd;
+            user.PasswordResetToken = null;
+            user.PasswordResetTokenDate = null;
+            _userRepository.Save();
+
+            return View("ChangePwdSuccess");
         }
         private string GenerateRandomToken()
         {

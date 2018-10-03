@@ -57,6 +57,10 @@ namespace Tasks.Model
         [Column("PasswordResetToken")]
         public string PasswordResetToken { get; set; }
 
+        [DataType(DataType.DateTime)]
+        [Column("PasswordResetTokenDate")]
+        public DateTime? PasswordResetTokenDate { get; set; }
+
         [ForeignKey("ToUserId")]
         public ICollection<WorkTask> ToTasks { get; set; }
         [ForeignKey("FromUserId")]

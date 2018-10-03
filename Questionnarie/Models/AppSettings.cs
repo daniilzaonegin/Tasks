@@ -56,5 +56,16 @@ namespace Tasks.Models
             }
         }
 
+        public int ResetPasswordTokenExpireTime {
+            get
+            {
+                int expireTime;
+                if (int.TryParse(ConfigurationManager.AppSettings["ResetPasswordTokenExpireTime"], out expireTime))
+                    return expireTime;
+                else
+                    return -1;
+            }
+        }
+
     }
 }

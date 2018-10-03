@@ -25,8 +25,11 @@ namespace Tasks.Helpers
 
             client.Credentials = new NetworkCredential(appSettings.EmailAccount, appSettings.EmailPwd); //);
             client.EnableSsl = true;
+            string bodyHtml =$"<div style='white-space:pre'>{body}</div>";
 
-            client.Send("Tasks4uApp " + appSettings.EmailAccount, to, subject, body);
+            MailMessage message = new MailMessage("Tasks4uApp " + appSettings.EmailAccount, to, subject, bodyHtml);
+            message.IsBodyHtml = true;
+            client.Send(message);
         }
 
     }
