@@ -33,10 +33,12 @@ namespace Tasks.Model.Entities
         public DateTime When { get; set; }
 
         [Required]
+        [MaxLength(255)]
         public string Summary { get; set; }
+        [MaxLength(100)]
         public string Subject { get; set; }
 
-
+        [MaxLengthAttribute(255)]
         public string CompleteMsg { get; set; }
         public bool Completed { get; set; }
     }

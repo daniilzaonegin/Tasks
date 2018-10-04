@@ -45,24 +45,32 @@ namespace Tasks.Controllers
                 return View(model);
             }
 
+            //получение user из базы
             User user = _userRepository.GetUser(model.UserName, model.Password);
             
             if(user == null)
             {
+                //пользоватлель в БД не найден
                 ModelState.AddModelError("", "Invalid user name or password!");
                 return View(model);
             }
 
+            //создание объекта хранящего в себе информацию о пользователе
             AppUserState appUserState = new AppUserState()
             {
                 UserName = user.UserName,
                 Role = user.RoleString
             };
 
+            //авторизация
             IdentitySignin(appUserState);
 
             if (!string.IsNullOrEmpty(model.ReturnUrl))
+                //если пользователь хотел открыть какую-то страницу и она не открылась
+                //из-за того, что он был не авторизован, вернуть ее.
                 return Redirect(model.ReturnUrl);
+
+            //в противном случае вернуть список задач, это view по умолчанию
             return Redirect(Url.Action("TaskList", "Home"));
         }
 
@@ -169,7 +177,7 @@ namespace Tasks.Controllers
                 claims.Add(new Claim(ClaimTypes.Role, r));
             }
             ClaimsIdentity identity = new ClaimsIdentity(claims, DefaultAuthenticationTypes.ApplicationCookie);
-            Session["Role"] = appUserState.Role;
+
             AuthenticationManager.SignIn(new AuthenticationProperties()
             {
                 AllowRefresh = true,
